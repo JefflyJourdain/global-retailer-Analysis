@@ -4,24 +4,46 @@ CREATE VIEW currency as
     SELECT top 15 * 
     from DimCurrency;
 GO
+
+
 DROP view IF EXISTS vwDimAccount;
 GO
 Create view vwDimAccount AS
     select Accountkey,accounttype,AccountDescription,Operator,Valuetype
     from DimAccount;
 GO
+
+
 drop view IF EXISTS vwFactFinance;
 GO
 create VIEW vwFactFinance AS 
     SELECT financekey,organizationkey,DepartmentGroupKey,ScenarioKey,AccountKey,Amount
     from FactFinance;
 GO
+
+
 drop view IF EXISTS vwDimCustomer;
 GO
-create VIEW vwDimCustomer AS
-    SELECT CustomerKey,geographykey,concat(firstname, ' ', middlename, ' ', lastname) as CustomerName,
-        birthdate,yearlyincome
-    from DimCustomer;
+CREATE VIEW vwDimCustomer AS
+
+    WITH TierWindow AS (
+        
+        SELECT CustomerKey,
+
+            CASE 
+                WHEN SUM(ExtendedAmount) > PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'VIP'
+                WHEN SUM(ExtendedAmount) >= PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'Medium'
+                WHEN SUM(ExtendedAmount) < PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'Low'
+                ELSE 'STANDARD'
+                END AS Tier
+        from FactInternetSales
+        group by customerkey)
+    
+SELECT DimCustomer.CustomerKey,geographykey,concat(firstname, ' ', middlename, ' ', lastname) as CustomerName,
+        birthdate,yearlyincome,Tier
+from DimCustomer
+left JOIN TierWindow on DimCustomer.CustomerKey = TierWindow.CustomerKey;
+
 GO
 drop view IF EXISTS vwDimGeography;
 GO
