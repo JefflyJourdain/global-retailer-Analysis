@@ -31,7 +31,7 @@ CREATE VIEW vwDimCustomer AS
         SELECT CustomerKey,
 
             CASE 
-                WHEN SUM(ExtendedAmount) > PERCENTILE_CONT(0.85) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'VIP'
+                WHEN SUM(ExtendedAmount) > PERCENTILE_CONT(0.90) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'VIP'
                 WHEN SUM(ExtendedAmount) >= PERCENTILE_CONT(0.50) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'GOLD'
                 WHEN SUM(ExtendedAmount) >= PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'SILVER'
                 WHEN SUM(ExtendedAmount) < PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY sum(ExtendedAmount)) over() THEN 'BASE'
