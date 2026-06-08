@@ -18,6 +18,7 @@ drop view IF EXISTS vwFactFinance;
 GO
 create VIEW vwFactFinance AS 
     SELECT financekey,organizationkey,DepartmentGroupKey,ScenarioKey,AccountKey,Amount,date
+
     from FactFinance;
 GO
 
