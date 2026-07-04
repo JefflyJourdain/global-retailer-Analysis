@@ -1,180 +1,109 @@
+
+
 # 🚴 Global Bike Retail — Executive Analytics Dashboard
 
-> **Status:** 🚧 In Progress — 2 of 4 dashboard pages completed
+> **Status:** ✅ Completed | **Live Report:** [View Power BI Dashboard](#insert-your-power-bi-service-link-here) | **Download:** [`Analytics.pbix`](#insert-link-to-pbix-file-here)
 
-A end-to-end data analytics project built on a global bike retail dataset. The project combines **SQL Server** for data exploration and modelling with **Power BI** for executive-level reporting, covering both B2C (internet) and B2B (reseller) sales channels across multiple countries and product categories.
+An end-to-end data analytics project built on a global bike retail dataset. The project combines **SQL Server** for data exploration and modeling with **Power BI** for executive-level reporting, covering both B2C (internet) and B2B (reseller) sales channels across multiple countries and product categories.
 
 ---
 
 ## 📋 Table of Contents
 
 - [Project Overview](#project-overview)
-- [Tech Stack](#tech-stack)
-- [Dataset](#dataset)
-- [SQL — Data Exploration & Views](#sql--data-exploration--views)
-- [Power BI Dashboard](#power-bi-dashboard)
-- [Key Findings](#key-findings)
+- [Tech Stack & Dataset](#tech-stack--dataset)
+- [SQL Data Layer](#sql-data-layer)
+- [Dashboard & Key Findings](#dashboard--key-findings)
 - [Project Structure](#project-structure)
-- [Roadmap](#roadmap)
 
 ---
 
 ## Project Overview
 
-This project analyzes sales performance for a global bicycle retailer, exploring revenue trends, profitability, customer behaviour, and operational metrics. The goal is to deliver a 4-page executive dashboard that enables decision-makers to monitor KPIs, compare sales channels, and identify top-performing products and regions.
+This project analyzes sales performance for a global bicycle retailer, exploring revenue trends, channel profitability, and supply chain risks. The goal is to deliver a 3-page executive dashboard that enables decision-makers to monitor KPIs and identify actionable business risks.
 
-**Business Questions addressed:**
-- How is overall revenue, profit, and margin trending over time?
-- How do B2B (reseller) and B2C (internet) channels compare in margin and average order value?
-- Which products drive the most volume vs. the most profit?
-- How does performance vary across regions and product categories?
+**Core Business Questions Addressed:**
+1. How is overall revenue, profit, and margin trending over time, and which products drive volume vs. profit?
+2. Are taxes and freight costs quietly eroding our profit margins, and does this impact our B2B channel more than B2C?
+3. Which product categories are at the highest risk of stockouts or overstocking based on sales velocity?
 
 ---
 
-## Tech Stack
+## Tech Stack & Dataset
 
 | Tool | Purpose |
 |------|---------|
-| **SQL Server** | Data exploration, EDA, view creation |
-| **Power BI** | Interactive executive dashboard |
-| **T-SQL / Jupyter Notebook** | EDA queries and findings documentation |
+| **SQL Server (T-SQL)** | Data exploration, EDA, view creation |
+| **Jupyter Notebook** | EDA query documentation |
+| **Power BI** | Interactive executive dashboard & DAX logic |
+
+**Source Data:** A Microsoft provided fictional dataset
+*   **Fact Tables:** `FactInternetSales` (60,398 rows), `FactResellerSales` (60,855 rows), `FactProductInventory`
+*   **Date Range:** December 2010 – January 2014 
+*   **Total Transaction Records:** ~120,000 across B2B & B2C channels
 
 ---
 
-## Dataset
+## SQL Data Layer
 
-The source is an **AdventureWorksDW**-style data warehouse with a star schema containing **30 tables** (fact + dimension tables).
+Clean, reusable SQL views were created to abstract raw table complexity and serve as the exact data layer for Power BI. EDA was conducted in a Jupyter notebook prior to dashboard development.
 
-| Fact Table | Description | Row Count |
-|---|---|---|
-| `FactInternetSales` | B2C / direct online sales | 60,398 |
-| `FactResellerSales` | B2B / reseller channel sales | 60,855 |
-| `FactFinance` | Financial and accounting data | — |
-| `FactProductInventory` | Inventory movement | — |
+**Dimension Views:** `vwDimCustomer`, `vwDimGeography`, `vwDimProduct` (filtered to current active products only), `vwDimReseller`, `vwDimAccount`, `currency`
 
-**Date range covered:** December 2010 – January 2014
-
-**Total transaction records:** ~120,000 across both sales channels
+**Fact Views:** `vwFactInternetSales`, `vwFactResellerSales`, `vwFactFinance`, `vwFactProductInventory`
 
 ---
 
-## SQL — Data Exploration & Views
+## Dashboard & Key Findings
 
-### Exploratory Data Analysis (`Eda.ipynb`)
+*Global filters for Region, Category, and Year are applied across all pages.*
 
-EDA was performed in a SQL Jupyter notebook to understand the shape and scope of the data before building the dashboard. Key steps included:
+### Page 1: Executive Overview
+High-level summary of overall business performance, revenue trends, and product mix.
 
-- Counting total tables in the database (30 base tables)
-- Validating row counts across both fact tables
-- Determining the date range of available data
-- Calculating Average Order Value (AOV) per channel
-- Ranking top 10 products by order volume, revenue, and profit
+<img width="495" height="263" alt="{018F25B0-89B0-449A-B666-84A83363DB2A}" src="https://github.com/user-attachments/assets/2f4d8335-8952-4fc9-bbbe-2f70d11158e9" />
 
-### SQL Views (`main_query.sql`)
 
-Clean, reusable views were created to abstract raw table complexity and serve as the data layer for Power BI:
+**Key Insights:**
+* **Accessories dominate order volume** — products like Water Bottles, Patch Kits, and Tire Tubes are the most frequently ordered items in the B2C channel.
+* **Bikes drive absolute revenue and profit** — despite lower order volumes, Mountain-200 and Road-150 series bikes account for the top positions in both revenue and profit rankings.
+* **Strong revenue–profit correlation** — the top 10 products by revenue and profit are nearly identical, suggesting consistent, healthy margins across the high-value product line.
 
-| View | Source Table | Purpose |
-|------|-------------|---------|
-| `vwDimCustomer` | `DimCustomer` | Customer profile with full name and income |
-| `vwDimGeography` | `DimGeography` | City, state, country, and territory |
-| `vwDimProduct` | `DimProduct` | Current active products only (`Status = 'Current'`) |
-| `vwDimAccount` | `DimAccount` | Account types and descriptions |
-| `vwDimReseller` | `DimReseller` | Reseller info with annual sales and revenue |
-| `vwFactInternetSales` | `FactInternetSales` | B2C sales transactions |
-| `vwFactResellerSales` | `FactResellerSales` | B2B reseller sales transactions |
-| `vwFactFinance` | `FactFinance` | Finance fact with key foreign keys and amount |
-| `vwFactProductInventory` | `FactProductInventory` | Inventory movement (units in/out/balance) |
-| `currency` | `DimCurrency` | Top 15 currencies reference |
+### Page 2: Channel Breakdown & Margin Erosion
+Deep dive into B2B vs. B2C performance, focusing on the hidden impact of operational costs on net profitability.
 
----
+<img width="486" height="256" alt="{B91668D8-C640-4E1B-A7F7-0AD1AF506BFF}" src="https://github.com/user-attachments/assets/a99aa475-748b-49c3-aed4-945304444135" />
 
-## Power BI Dashboard
 
-The dashboard is structured into **4 pages**. Filters for **Region**, **Category**, and **Year** are available on all pages.
+**Key Insights:**
+* **B2B margins are structurally squeezed by freight and taxes.** Transaction-level analysis reveals many reseller sales are priced at or below standard product cost (a wholesale pricing strategy). Consequently, taxes and freight erode what little product margin exists.
+* **B2C retains a healthy operational buffer.** The B2C channel’s higher retail markups provide a margin buffer that is nearly four times larger than its tax and freight costs.
+* **B2B AOV is significantly higher** — the average B2B order value ($1,330.67) is almost **3× the B2C AOV** ($486.09), reflecting bulk purchasing behavior, though it comes with the aforementioned margin trade-offs.
 
-### ✅ Page 1 — Overview
+### Page 3: Customers & orders insights
+Deep dive into customer acquisition, ordering behavior, and demographic value drivers across the B2C channel.
 
-High-level executive summary of overall business performance.
+<img width="490" height="258" alt="{D7E9A757-E444-4FC9-9778-F65EAED6F9FB}" src="https://github.com/user-attachments/assets/e41b964b-159e-4f4c-accb-9895c43858fb" />
 
-**KPI Cards:**
-- Revenue: **$53.24M** *(▼ 4.6% vs Prior Month | ▼ 38.4% vs Prior Year)*
-- COGS: **$46.68M** *(▲ 8.9% vs Prior Month)*
-- Orders: **168.58K** *(▼ 3.7% vs Prior Month)*
-- Profit: **$6.56M** *(▼ 5.1% vs Prior Month)*
-- Margin: **12.32%** *(▲ 7.3% vs Prior Year)*
+Key Insights:
 
-**Visuals:**
-- Operating Profit Over Time (COGS, Total Revenue, Margin trend by month)
-- Revenue by Month (bar chart)
-- Top Products by Revenue and Profit (table)
-- Revenue by Region (treemap — US, Australia, UK, Canada, Germany, France)
-- Orders by Category (Accessories 53K, Clothing 45K, Bikes 44K, Components 27K)
-
----
-
-### ✅ Page 2 — Channel Breakdown
-
-Deep dive into B2B vs B2C performance.
-
-**KPI Cards:**
-- B2B Margin: **36.10%** | B2C Margin: **62.60%**
-- B2B AOV: **$141.80** | B2C AOV: **$19.83**
-
-**Visuals:**
-- Revenue By Channel (pie chart — B2B vs B2C split)
-- B2C and B2B Revenue by Month (combo bar chart)
-- B2B Orders Trending (line chart)
-- B2C Orders Trending (line chart)
-- Top 3 Resellers (filterable by region, category, year)
-
----
-
-### 🔄 Page 3 — Orders & Customers *(In Progress)*
-
-Planned analysis of customer demographics, order patterns, and geographic distribution.
-
----
-
-### 🔄 Page 4 — Operation Analysis *(In Progress)*
-
-Planned review of inventory movement, logistics, and operational efficiency.
-
----
-
-## Key Findings
-
-From the SQL EDA:
-
-- **Accessories dominate order volume** — products like Water Bottles, Patch Kits, and Tire Tubes are the most frequently ordered items in the B2C channel.
-- **Bikes drive revenue and profit** — despite lower order volumes, Mountain-200 and Road-150 series bikes account for the top positions in both revenue and profit rankings.
-- **Strong revenue–profit correlation** — the top 10 products by revenue and profit are nearly identical, suggesting consistent margins across the high-value product line.
-- **B2B AOV is significantly higher** — the average B2B order value ($1,330.67) is almost **3× the B2C AOV** ($486.09), as expected for a wholesale/reseller channel.
-- **Balanced channel volume** — B2C and B2B transaction counts are nearly equal (~60K each), but the channels differ significantly in margin profile (B2C 62.6% vs B2B 36.1%).
+Customer Mix & Retention: The dashboard tracks the split between New vs. Returning customers. (Note: Fill in your specific finding here based on the visual—for example: "Returning customers make up X% of orders but drive a disproportionately higher share of revenue due to higher AOV.")
+AOV & Revenue Tiering: B2C revenue tiering reveals how order value is distributed among shoppers. Tracking AOV trends alongside this tiering shows whether growth is coming from occasional high-spenders or a broad base of lower-tier transactions.
+Occupation-Driven Demand: Customer occupation distribution highlights which professional demographics are engaging with the brand most frequently, providing a clear target audience for future marketing spend.
 
 ---
 
 ## Project Structure
 
-```
+```text
 ├── main_query.sql       # SQL view definitions (data layer for Power BI)
 ├── Eda.ipynb            # Exploratory Data Analysis in SQL notebook
-├── Analytics.pbix       # Power BI dashboard file (4-page report)
-└── README.md
+├── Analytics.pbix       # Power BI dashboard file
+└── README.md            # Project documentation
 ```
 
 ---
 
-## Roadmap
+*Dataset based on publicly available data. Built with SQL Server and Power BI.*
 
-- [x] Database exploration and EDA
-- [x] SQL views for Power BI data layer
-- [x] Overview page (Page 1)
-- [x] Channel Breakdown page (Page 2)
-- [ ] Orders & Customers page (Page 3)
-- [ ] Operation Analysis page (Page 4)
-- [ ] Final review and publish
-
----
-
-*Dataset based on AdventureWorksDW. Built with SQL Server and Power BI.*
+***
