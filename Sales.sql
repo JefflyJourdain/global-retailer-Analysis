@@ -1,31 +1,15 @@
-DROP VIEW IF EXISTS currency;
-GO
-CREATE VIEW currency as
-    SELECT top 15 * 
-    from DimCurrency;
-GO
 
 
-DROP view IF EXISTS vwDimAccount;
+DROP view IF EXISTS DimAccount;
 GO
-Create view vwDimAccount AS
+Create view DimAccount AS
     select Accountkey,accounttype,AccountDescription,Operator,Valuetype
     from DimAccount;
 GO
 
-
-drop view IF EXISTS vwFactFinance;
+drop view IF EXISTS DimCustomer;
 GO
-create VIEW vwFactFinance AS 
-    SELECT financekey,organizationkey,DepartmentGroupKey,ScenarioKey,AccountKey,Amount,date
-
-    from FactFinance;
-GO
-
-
-drop view IF EXISTS vwDimCustomer;
-GO
-CREATE VIEW vwDimCustomer AS
+CREATE VIEW DimCustomer AS
 
     WITH TierWindow AS (
         
@@ -49,40 +33,40 @@ left JOIN TierWindow on DimCustomer.CustomerKey = TierWindow.CustomerKey;
 GO
 drop view IF EXISTS vwDimGeography;
 GO
-create VIEW vwDimGeography AS 
+create VIEW DimGeography AS 
     SELECT GeographyKey,City,StateProvinceName,EnglishCountryRegionName As region,SalesTerritoryKey
     from DimGeography;
 GO
-DROP view if exists vwDimProduct
+DROP view if exists DimProduct
 GO 
-CREATE VIEW vwDimProduct AS
+CREATE VIEW DimProduct AS
     SELECT ProductKey,EnglishProductName as ProductName,ProductSubcategoryKey,SafetyStockLevel,ReorderPoint,[Status]
     from DimProduct
     where status = 'Current';
 GO
-drop view IF EXISTS vwfactinternetsales;
+drop view IF EXISTS factinternetsales;
 GO
-create VIEW vwfactinternetsales AS
+create VIEW factinternetsales AS
         
     SELECT ProductKey,CustomerKey,SalesOrderNumber,TotalProductCost,OrderQuantity,UnitPrice,ExtendedAmount,taxamt as TaxAmount,Freight,
     SalesTerritoryKey,OrderDate,DueDate,ShipDate
     from factinternetsales;
 GO
-drop view if EXISTS vwdimreseller;
+drop view if EXISTS dimreseller;
 GO
-create VIEW vwdimreseller AS
+create VIEW dimreseller AS
     SELECT ResellerKey,GeographyKey,ResellerName,AnnualSales,AnnualRevenue,YearOpened
     from DimReseller;
 GO
-drop view if exists vwfactproductinventory;
+drop view if exists factproductinventory;
 GO
-create VIEW vwfactproductinventory AS
+create VIEW factproductinventory AS
     SELECT ProductKey,MovementDate,UnitCost,UnitsIn,UnitsOut,UnitsBalance
     from factproductinventory;
 go
-drop view if exists vwfactresellersales;
+drop view if exists factresellersales;
 GO
-create VIEW vwfactresellersales AS
+create VIEW factresellersales AS
     SELECT ProductKey,ResellerKey,SalesOrderNumber,TotalProductCost,OrderQuantity,UnitPrice,ExtendedAmount,taxamt as TaxAmount,Freight,
     SalesTerritoryKey,OrderDate,DueDate,ShipDate
     from factresellersales;
