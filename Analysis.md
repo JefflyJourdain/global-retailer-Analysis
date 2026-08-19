@@ -1,5 +1,5 @@
 Business Question #1: Margin/Revenue anomally
-What drove the anomalous swings in June (margin/revenue collapse followed by an AOV spike), and was this driven by a sudden shift in channel mix or category demand?
+What drove the anomalous revenue/margin collapse in June, and was this drop present in both channels?? was it driven by an specific category, region?
 
 
 
@@ -23,8 +23,10 @@ ORDER BY month_num
 ```
 
 
-    (12 rows affected)
-    
+    (12 rows affected)
+
+    
+
     Month     | Revenue   | MoM_Revenue
     ----------+-----------+------------
     January   | 42464.61  | NULL       
@@ -39,8 +41,10 @@ ORDER BY month_num
     October   | 80042.06  | 37.37      
     November  | 68296.15  | -14.67     
     December  | 87089.06  | 27.52      
-    (12 rows)
-    
+    (12 rows)
+
+    
+
     Total execution time: 00:00:00.190
 
 
@@ -67,8 +71,10 @@ ORDER BY month_num
 ```
 
 
-    (12 rows affected)
-    
+    (12 rows affected)
+
+    
+
     Month     | Revenue   | MoM_Revenue
     ----------+-----------+------------
     January   | 225289.38 | NULL       
@@ -83,8 +89,10 @@ ORDER BY month_num
     October   | 166962.33 | 45.5       
     November  | 196300.93 | 17.57      
     December  | 142031.81 | -27.65     
-    (12 rows)
-    
+    (12 rows)
+
+    
+
     Total execution time: 00:00:00.193
 
 
@@ -128,8 +136,10 @@ ORDER BY ABS(j.JuneRevenue - b.TypicalRevenue) DESC;
 ```
 
 
-    (16 rows affected)
-    
+    (16 rows affected)
+
+    
+
     Category        | JuneRevenue | JuneOrders | TypicalRevenue | TypicalOrders | RevenueDeviation
     ----------------+-------------+------------+----------------+---------------+-----------------
     Mountain Bikes  | 17184.01    | 4          | 54139.54       | 14            | -36955.53       
@@ -148,8 +158,10 @@ ORDER BY ABS(j.JuneRevenue - b.TypicalRevenue) DESC;
     Saddles         | 243.76      | 2          | 209.41         | 2             | 34.35           
     Caps            | 59.33       | 2          | 70.2           | 3             | -10.87          
     Shorts          | 695.89      | 5          | 690.3          | 2             | 5.59            
-    (16 rows)
-    
+    (16 rows)
+
+    
+
     Total execution time: 00:00:00.382
 
 
