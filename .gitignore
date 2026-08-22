@@ -1,6 +1,6 @@
 *.env
 
-sales.sql
+Sales.sql
 
 eda.ipynb
 eda2.ipynb
