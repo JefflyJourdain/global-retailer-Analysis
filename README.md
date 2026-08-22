@@ -1,10 +1,13 @@
 
 
-# 🚴 Global Bike Retail — Executive Analytics Dashboard
+# 🚴 AdventureWorks Global Bike Retail — Executive Analytics Report
 
-> **Status:** ✅ Completed | **Live Report:** [View Power BI Dashboard](#insert-your-power-bi-service-link-here) | **Download:** [`Analytics.pbix`](#insert-link-to-pbix-file-here)
+> **Status:** ✅ Completed | 
 
-An end-to-end data analytics project built on a global bike retail dataset. The project combines **SQL Server** for data exploration and modeling with **Power BI** for executive-level reporting, covering both B2C (internet) and B2B (reseller) sales channels across multiple countries and product categories.
+Background & Business Context
+AdventureWorks, a global manufacturing company, is facing challenges in making data-driven decisions due to a lack of structured financial reporting and performance tracking. Without a clear view of key financial metrics such as sales, revenue, and profit, the company struggles to assess regional performance, identify product-level trends, and recognize high-value products. This lack of visibility hinders strategic planning and operational efficiency.
+
+To support strategic decision-making, historical sales data (2011–2014) was analyzed across B2C (Internet) and B2B (Reseller) channels utilizing advanced analytical frameworks.
 
 ---
 
@@ -22,12 +25,46 @@ An end-to-end data analytics project built on a global bike retail dataset. The 
 
 This project analyzes sales performance for a global bicycle retailer, exploring revenue trends, channel profitability, and supply chain risks. The goal is to deliver a 3-page executive dashboard that enables decision-makers to monitor KPIs and identify actionable business risks.
 
-**Core Business Questions Addressed:**
-1. How is overall revenue, profit, and margin trending over time, and which products drive volume vs. profit?
-2. Are taxes and freight costs quietly eroding our profit margins, and does this impact our B2B channel more than B2C?
-3. Which product categories are at the highest risk of stockouts or overstocking based on sales velocity?
+📊 Analytical Frameworks Applied
+
+Rather than simply reporting top-line metrics, this project applies specific operational frameworks to isolate business drivers:
+
+Mix Shift & Variance Analysis (PVM Decomposition): Isolating whether the B2B vs. B2C margin gap is driven by Pricing (wholesale discount structures) or Mix (channels buying different product categories).
+
+Channel & Route-to-Market Analytics: Evaluating B2B vs. B2C not just as revenue streams, but as distinct business models with different cost structures and operational risks.
+
+Customer & Account Profitability (Pareto & Cost-to-Serve): Moving from a "revenue-centric" view of customers to a "value-centric" view, identifying the vital few who drive the bulk of the bottom line.
+
+Product & Category Analytics: Identifying "Cash Cows" vs. volume-drivers to assess revenue concentration risk.
 
 ---
+
+🔍 Key Findings & Strategic Insights
+  Detailed SQL queries, baseline calculations, and statistical proofs for these findings are documented in the analysis.md file).
+
+1. Mix Shift & Variance Analysis: The B2B Margin Squeeze
+
+Framework Applied: Price/Volume/Mix (PVM) Decomposition
+
+Insight: The B2B channel operates with structurally thinner margins than B2C. Through PVM analysis, we definitively ruled out Product Mix as the culprit (both channels sell primarily Road and Mountain bikes). Instead, the gap is entirely driven by Pricing Structure—specifically, intrinsic wholesale pricing. B2B products carry the same unit cost but a significantly lower baseline selling price. Because this baseline margin is intentionally thin, operational costs (freight and taxes) easily erode what little profit remains.
+
+2. Channel Mix Analysis: The 2013 Anomaly Isolation
+
+Framework Applied: Channel P&L Modeling & Root Cause Isolation
+
+Insight: In FY2013, B2B revenue plummeted by -52.68% in June against a highly stable baseline. We ruled out B2C issues and catalog-wide product shifts (all 26 subcategories dropped). The root cause was isolated geographically: France fell to 13% of typical order volume, and the UK to 30%. This points away from macroeconomic demand drops and directly toward an account-specific failure (e.g., a paused major contract or regional logistical halt) in Europe.
+
+3. Customer Profitability: Extreme Revenue Concentration
+
+Framework Applied: Pareto Principle (80/20) & Account Segmentation
+
+Insight: The business is highly dependent on a tiny fraction of its customer base.
+B2C: The top 25% of consumers (VIP tier) generate 75.6% of revenue. The bottom 50% contribute less than 2%.
+B2B: The top 25% of resellers account for 74.7% of wholesale revenue. The bottom 50% of reseller accounts provide a mere 4.5%. This indicates a massive "long tail" of low-value accounts that likely cost more to serve than they generate.
+
+4. Product Analytics: Volume vs. Value Disconnect
+Framework Applied: Product Margin Matrix
+Insight: High transaction volume does not equate to high value. Accessories (Water Bottles, Tire Tubes) dominate order counts but contribute marginally to the bottom line. Mountain and Road bikes represent the true "Cash Cows" of the organization, driving the vast majority of absolute profit despite lower transaction frequencies.
 
 ## Tech Stack & Dataset
 
