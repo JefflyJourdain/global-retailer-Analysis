@@ -1,10 +1,2 @@
 *.env
 
-Sales.sql
-
-eda.ipynb
-eda2.ipynb
-eda2.md
-findings.md
-readme2.md
-scripts.py
