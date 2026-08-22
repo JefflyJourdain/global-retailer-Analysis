@@ -1,15 +1,15 @@
 
 
-DROP view IF EXISTS DimAccount;
+DROP view IF EXISTS vwDimAccount;
 GO
-Create view DimAccount AS
+Create view vwDimAccountDimAccount AS
     select Accountkey,accounttype,AccountDescription,Operator,Valuetype
     from DimAccount;
 GO
 
-drop view IF EXISTS DimCustomer;
+drop view IF EXISTS vwDimCustomer;
 GO
-CREATE VIEW DimCustomer AS
+CREATE VIEW vwDimCustomer  AS
 
     WITH TierWindow AS (
         
@@ -33,18 +33,18 @@ left JOIN TierWindow on DimCustomer.CustomerKey = TierWindow.CustomerKey;
 GO
 drop view IF EXISTS vwDimGeography;
 GO
-create VIEW DimGeography AS 
+create VIEW vwDimGeography AS 
     SELECT GeographyKey,City,StateProvinceName,EnglishCountryRegionName As region,SalesTerritoryKey
     from DimGeography;
 GO
-DROP view if exists DimProduct
+DROP view if exists vwDimProduct
 GO 
-CREATE VIEW DimProduct AS
+CREATE VIEW vwDimProduct AS
     SELECT ProductKey,EnglishProductName as ProductName,ProductSubcategoryKey,SafetyStockLevel,ReorderPoint,[Status]
     from DimProduct
     where status = 'Current';
 GO
-drop view IF EXISTS factinternetsales;
+drop view IF EXISTS vwfactinternetsales;
 GO
 create VIEW factinternetsales AS
         
